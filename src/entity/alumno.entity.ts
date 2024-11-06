@@ -16,7 +16,7 @@ export class Alumno {
     @Column()
     doc_index?: number;
 
-    @OneToMany(() => Curso, (curso) => curso.alumno)
+    @OneToMany(() => Curso, (curso) => curso.alumno ,{cascade: true, onDelete: "CASCADE"})
     cursos?: Curso[];
 
 }

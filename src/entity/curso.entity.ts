@@ -9,6 +9,6 @@ export class Curso {
     @Column({length: 200})
     nombre!: string;
 
-    @ManyToOne(() => Alumno, (alumno) => alumno.cursos)
+    @ManyToOne(() => Alumno, (alumno) => alumno.cursos, {onDelete:"CASCADE"})
     alumno?: Alumno;
 }

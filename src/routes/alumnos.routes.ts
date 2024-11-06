@@ -1,4 +1,5 @@
 import { Router, Request, Response} from 'express';
+import { Any } from 'typeorm';
 import { AppDataSource } from '../data-source';
 import { Alumno } from '../entity/alumno.entity';
 import { Curso } from '../entity/curso.entity';
@@ -22,12 +23,19 @@ router.post('/', async function (req: Request, res: Response) {
     alum1.nombre=req.body.nombre;
     alum1.apellido=req.body.apellido;
     alum1.doc_index=req.body.doc_index;
-    if(req.body.curso){
-        alum1.cursos=req.body.curso;
-    }
-    
+
     const Repositorio_alumno = AppDataSource.getRepository(Alumno);
     const result = await Repositorio_alumno.save(alum1);
+
+    if(req.body.curso){
+        req.body.curso.forEach((curso: { nombre: string; }) => {
+            var new_curso = new Curso();
+            new_curso.nombre=curso.nombre;
+            new_curso.alumno = alum1;
+            AppDataSource.getRepository(Curso).save(new_curso);
+        });
+    }
+
     res.json({mensaje: "Alumno creado correctamente", Alumno: result});
 })
 router.put('/', async function (req: Request, res: Response) {
