@@ -6,6 +6,8 @@ import { Curso } from '../entity/curso.entity';
 
 var router = Router();
 
+// todas estas apis, han sido probaads por postman
+
 router.get('/', async function (req: Request, res: Response) {
     //equivalente a un select * from alumno
     const alumnos = await AppDataSource.getRepository(Alumno).find();
@@ -13,12 +15,28 @@ router.get('/', async function (req: Request, res: Response) {
 })
 
 router.get('/:id', async function (req: Request, res: Response) {
+    // equivalente a select * from alumno where id= parametro_id
     var id_num = Number(req.params.id)
     const get_alumno = await AppDataSource.getRepository(Alumno).findOneBy({id: id_num});
     res.json({Alumno: get_alumno});
 })
 
 router.post('/', async function (req: Request, res: Response) {
+    //equivalente a un insert
+    /*
+    este seria un dato esperando en el body
+    {
+        "nombre": "Stefania",
+        "apellido": "Vargas",
+        "doc_index": 910086370,
+        "curso": [
+            {"nombre": "Angular"},
+            {"nombre": "Nodejs"}
+        ]
+    }
+    */
+
+
     const alum1= new Alumno()
     alum1.nombre=req.body.nombre;
     alum1.apellido=req.body.apellido;
@@ -39,6 +57,7 @@ router.post('/', async function (req: Request, res: Response) {
     res.json({mensaje: "Alumno creado correctamente", Alumno: result});
 })
 router.put('/', async function (req: Request, res: Response) {
+    // equivalente a un update from articulo set paramas  where id=req.body.id
     var id_num=req.body.id;
     const repositorio_alumno = AppDataSource.getRepository(Alumno);
     const get_alumno = await repositorio_alumno.findOneBy({id: id_num});
@@ -58,6 +77,7 @@ router.put('/', async function (req: Request, res: Response) {
 })
 
 router.delete('/:id', async function (req: Request, res: Response) {
+    //equivalente a un delete from alumno where id= params_id
     var id_num = Number(req.params.id);
     console.log(id_num);
     const alumno_repositorio =  AppDataSource.getRepository(Alumno);
